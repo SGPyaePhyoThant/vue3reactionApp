@@ -4,7 +4,8 @@
 <Block v-if="isPlaying" :delay="delay" @stopByBlockComponent="showReactionTimer" @showMattePara="showMatte"/>
 <Results v-if="showClickedTime">
   <template v-slot:resultValue>
-    <h3>{{clickedTime}}</h3>
+    <h3>全部は{{clickedTime}}MiliSecond</h3>
+    <h3>{{rank}}</h3>
   </template>
 </Results>
 <p v-show="showMatteParagraph" >ちょっと待ってね。。いまタイマーが数えているんだよ。</p>
@@ -27,7 +28,8 @@ export default {
       delay:null,
       clickedTime:null,
       showClickedTime:false,
-      showMatteParagraph:false
+      showMatteParagraph:false,
+      rank:null
     }
   },
   methods:{
@@ -41,6 +43,13 @@ export default {
     this.isPlaying = false
     this.showClickedTime = true
     this.showMatteParagraph = false
+    if(reactionTimer<250){
+     this.rank = ' ランクはニンジャです。'
+    } else if(reactionTimer < 500){
+      this.rank ='早いけど。。。'
+    }else{
+     this.rank = '頑張ってね。。。'
+    }
   },
   showMatte(){
     this.showMatteParagraph = true
