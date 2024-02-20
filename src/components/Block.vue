@@ -1,7 +1,7 @@
 
 <template>
-  <div class="block" v-if="showBlock">
-    Click
+  <div class="block" v-if="showBlock" @click="stopTimer">
+    クリックしてタイマーが終わる。
   </div>
 </template>
 
@@ -9,24 +9,37 @@
 export default {
     data(){
         return {
-            showBlock:false
+            showBlock:false,
+            timer:null,
+            reactionTime:0
         }
     },
 props:['delay'],
 mounted(){
-    console.log('component mounted')
     setTimeout(()=>{
         this.showBlock = true
-        console.log('this.showBloc after Delay', this.delay)
-        console.log('1')
+        this.startTimer()
     },this.delay)
-        console.log('2')
 },
 updated(){
-    console.log('3')
+    // console.log('3')
 },
 unmounted(){
-    console.log('this is unmounted state')
+    // console.log('this is unmounted state')
+},
+methods:{
+    startTimer(){
+        this.$emit('showMattePara')
+        this.timer = setInterval(()=>{
+            this.reactionTime += 10
+            console.log('________reactionTimer____________',this.reactionTime)
+        },10)
+    },
+    stopTimer(){
+        console.log('________this.timer________',this.timer)
+        clearInterval(this.timer)
+        this.$emit('stopByBlockComponent',this.reactionTime)
+    }
 }
 }
 </script>

@@ -1,27 +1,49 @@
 <template>
 <h3>こんにちは、リエションタイムです。</h3>
-<button @click="start" :disabled="isPlaying">Play</button>
-<Block v-if="isPlaying" :delay="delay"/>
+<button @click="start" :disabled="isPlaying">プレイ</button>
+<Block v-if="isPlaying" :delay="delay" @stopByBlockComponent="showReactionTimer" @showMattePara="showMatte"/>
+<Results v-if="showClickedTime">
+  <template v-slot:resultValue>
+    <h3>{{clickedTime}}</h3>
+  </template>
+</Results>
+<p v-show="showMatteParagraph" >ちょっと待ってね。。いまタイマーが数えているんだよ。</p>
+<!-- <p v-if="showClickedTime">全部は{{clickedTime}}ms</p> -->
 </template>
 
 <script>
 import Block from './components/Block.vue'
+import Results from './components/Results.vue'
 
 export default {
   name: 'App',
   components: {
-    Block
+    Block,
+    Results
   },
   data(){
     return {
       isPlaying:false,
-      delay:null
+      delay:null,
+      clickedTime:null,
+      showClickedTime:false,
+      showMatteParagraph:false
     }
   },
   methods:{
     start(){
       this.delay = 2000 + Math.random() * 5000
       this.isPlaying =true
+      this.showClickedTime = false
+  },
+  showReactionTimer(reactionTimer){
+    this.clickedTime = reactionTimer
+    this.isPlaying = false
+    this.showClickedTime = true
+    this.showMatteParagraph = false
+  },
+  showMatte(){
+    this.showMatteParagraph = true
   }
 }
 }
